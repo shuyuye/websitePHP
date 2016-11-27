@@ -1,0 +1,133 @@
+1.地图动，marker不动
+       （1）map.addEventListener('ondragging', function(){
+                  marker.setPosition(map.getCenter());
+          });
+       （2） map.addEventListener('dragend', function(){    //移动结束后定位
+                  marker.setPosition(map.getCenter());
+          });
+2.图标可拖动
+       marker2.enableDragging();//可拖拽
+
+
+3.获取marker的坐标
+                marker2.addEventListener("click", function () { 
+	  	var marketpoint =this.getPosition();//获取一个点 
+	  	var name = marketpoint.lng; 
+	  	var name1 = marketpoint.lat; 
+
+4.定义坐标点所在图标位置：
+            var myIcon1 = new BMap.Icon("images/user_quick_map4.png", new             BMap.Size(30, 50),
+	    {   anchor: new BMap.Size(12, 40),  
+	 	offset: new BMap.Size(10, 25),   // 指定定位位置
+             imageOffset: new BMap.Size(0,-20)   // 设置图片偏移
+             });
+	   var marker2 = new BMap.Marker(point, {
+		icon: myIcon1
+	     }); // 创建标注
+	   map.addOverlay(marker2);  
+
+
+
+5.更据经纬度获取地址
+      （1）
+ var geoc = new BMap.Geocoder();
+       geoc.getLocation(point,function(rs){
+       	var str=" ";
+       	  var addComp = rs.addressComponents;
+//                    console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+              var   current_prov = addComp.province;
+               var current_city = addComp.city;
+               var current_area = addComp.district;
+               var  current_stree=addComp.street ;
+                var  current_number= addComp.streetNumber ;
+                 var  current_jian= addComp.lpo;
+                str+=current_prov+current_city+current_area+current_stree+current_number;
+                
+                alert(str);
+       })*/
+         （2）  var myGeo = new BMap.Geocoder();      
+// 根据坐标得到地址描述    
+myGeo.getLocation(point, function(result){      
+                 if (result){      
+                     alert(result.address);      
+                  }      
+});
+
+
+6.范围内坐标地址
+ var ypoint=new BMap.Circle(Point,500);
+	    map.addOverlay(ypoint);        //添加一个圆形覆盖物
+    myGeo.getLocation(Point,
+        function mCallback(rs){
+            var allPois = rs.surroundingPois;       //获取全部POI（该点半径为100米内有6个POI点）
+            for(i=0;i<allPois.length;++i){
+                document.getElementById("panel").innerHTML += "<p style='font-size:12px;'>" + (i+1) + "、" + allPois[i].title + ",地址:" + allPois[i].address + "</p>";
+                map.addOverlay(new BMap.Marker(allPois[i].point));                
+            }
+        },mOption
+    );
+
+
+7.刷新页面
+window.onload()=function(){
+  var a = document.getElementById("a";);
+
+    a.setAttribute("onclick", "click()");
+}
+
+function(){
+window.location.reload();
+
+}
+   
+
+8.清除上次驾车查询的结果：driving.clearResults();
+
+9.一次性清除地图上所有的覆盖物。map.clearOverlays();
+10.清除单个标注，用map.removeOverlay(marker);      
+      
+11.获取系统时间
+				var times=" ";
+				var today=new Date();
+                var h=today.getHours();
+                 var m=today.getMinutes();
+                 var s=today.getSeconds();
+                 times=times+h+":"+m+":"+s;
+
+
+12.倒计时器
+var sec = 6;
+var int=setInterval("clock()",1000);
+function clock()
+  {
+document.getElementById("daojs").value = "还有"+sec+"秒";
+      if(sec == 0){
+    clearInterval(int);
+      // document.getElementById("status").innerHTML = "GAME OVER"; 
+      $("#index_qucik_jiaoche").hide();
+      $("#quick_jiage").hide(); //滑出 
+      
+}
+else{
+ sec = sec-1;
+}
+  }
+
+13退出程序
+    plus.runtime.quit();
+
+
+
+14打开一个新页面，同时关闭自己
+
+mui.open  下面写mui.back 试试 我记得可以的
+a.html
+	mui.openWindow({
+						url: 'b.html',
+						 createNew:true,
+					});
+
+b.html
+
+if(plus.webview.currentWebview().opener() !=null)
+		   setTimeout(function(){ plus.webview.currentWebview().opener().close();},3000);
